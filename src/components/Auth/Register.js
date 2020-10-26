@@ -70,11 +70,24 @@ export default class Register extends Component {
         .createUserWithEmailAndPassword(email, password)
         .then((createUser) => {
           console.log(createUser);
+          this.setState({ loading: false });
         })
         .catch((err) => {
           console.log(err);
+          this.setState({
+            errors: this.state.errors.concat(err),
+            loading: false,
+          });
         });
     }
+  };
+
+  handleInputError = (errors, inputName) => {
+    return errors.some((error) =>
+      error.message.toLowerCase().includes(inputName)
+    )
+      ? "error"
+      : "";
   };
 
   handleChange = (event) => {
@@ -88,6 +101,7 @@ export default class Register extends Component {
       password,
       passwordConfirmation,
       errors,
+      loading,
     } = this.state;
     return (
       <Grid textAlign="center" verticalAlign="middle" className="app">
@@ -107,6 +121,7 @@ export default class Register extends Component {
                 onChange={this.handleChange}
                 type="text"
                 value={username}
+                className={this.handleInputError(errors, "username")}
               />
               <Form.Input
                 fluid
@@ -117,6 +132,7 @@ export default class Register extends Component {
                 onChange={this.handleChange}
                 type="email"
                 value={email}
+                className={this.handleInputError(errors, "email")}
               />
               <Form.Input
                 fluid
@@ -127,6 +143,7 @@ export default class Register extends Component {
                 onChange={this.handleChange}
                 type="password"
                 value={password}
+                className={this.handleInputError(errors, "password")}
               />
               <Form.Input
                 fluid
@@ -137,8 +154,15 @@ export default class Register extends Component {
                 onChange={this.handleChange}
                 type="password"
                 value={passwordConfirmation}
+                className={this.handleInputError(errors, "password")}
               />
-              <Button color="orange" fluid size="large">
+              <Button
+                className={loading ? "loading" : ""}
+                color="orange"
+                fluid
+                size="large"
+                disabled={loading}
+              >
                 Submit
               </Button>
             </Segment>
