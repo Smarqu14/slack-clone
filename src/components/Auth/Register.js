@@ -18,6 +18,7 @@ export default class Register extends Component {
     password: "",
     passwordConfirmation: "",
     errors: [],
+    loading: false,
   };
 
   isFormValid = () => {
@@ -59,10 +60,11 @@ export default class Register extends Component {
     errors.map((err, i) => <p key={i}>{err.message}</p>);
 
   handleSubmit = (event) => {
+    event.preventDefault();
     const { email, password } = this.state;
 
     if (this.isFormValid()) {
-      event.preventDefault();
+      this.setState({ errors: [], loading: true });
       firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)
