@@ -55,6 +55,9 @@ export default class Register extends Component {
     }
   };
 
+  displayError = (errors) =>
+    errors.map((err, i) => <p key={i}>{err.message}</p>);
+
   handleSubmit = (event) => {
     const { email, password } = this.state;
 
@@ -77,7 +80,13 @@ export default class Register extends Component {
   };
 
   render() {
-    const { username, email, password, passwordConfirmation } = this.state;
+    const {
+      username,
+      email,
+      password,
+      passwordConfirmation,
+      errors,
+    } = this.state;
     return (
       <Grid textAlign="center" verticalAlign="middle" className="app">
         <Grid.Column style={{ maxWidth: 450 }}>
@@ -131,10 +140,16 @@ export default class Register extends Component {
                 Submit
               </Button>
             </Segment>
-            <Message>
-              Already User ?<Link to="/login"> Login </Link>
-            </Message>
           </Form>
+          {errors.length > 0 && (
+            <Message error>
+              <h3>Error</h3>
+              {this.displayError(errors)}
+            </Message>
+          )}
+          <Message>
+            Already User ?<Link to="/login"> Login </Link>
+          </Message>
         </Grid.Column>
       </Grid>
     );
