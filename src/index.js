@@ -21,7 +21,7 @@ import { createStore } from "redux";
 import { Provider, connect } from "react-redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import rootReducer from "./reducers/index";
-import { setUser } from "./actions/index";
+import { setUser, clearUser } from "./actions";
 // Global State
 const store = createStore(rootReducer, composeWithDevTools());
 
@@ -34,9 +34,13 @@ class Root extends Component {
         // setUser(user)
         this.props.setUser(user);
         this.props.history.push("/");
+      } else {
+        this.props.history.push("/login");
+        this.props.clearUser();
       }
     });
   }
+
   render() {
     return this.props.isLoading ? (
       <Spinner />
@@ -54,8 +58,9 @@ const mapStateFromProps = (state) => ({
   isLoading: state.user.isLoading,
 });
 
-// we use this to redirect component to our main root
-const RootWithAuth = withRouter(connect(mapStateFromProps, { setUser })(Root));
+const RootWithAuth = withRouter(
+  connect(mapStateFromProps, { setUser, clearUser })(Root)
+);
 
 ReactDOM.render(
   // Provide global state to whoever component wants to use it
