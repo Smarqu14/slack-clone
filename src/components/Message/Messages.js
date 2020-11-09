@@ -57,7 +57,7 @@ export default class Messages extends Component {
       <Fragment>
         <MessageHeader />
         <Segment>
-          <Comment.Group className="messages">
+          <Comment.Group className="mesages">
             {this.displayMessages(messages)}
           </Comment.Group>
         </Segment>
